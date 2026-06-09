@@ -6,10 +6,20 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 ENVIRONMENT = "production"
 
-# Workers AI binding — gives access to env.AI
+# Workers AI binding
 [ai]
 binding = "AI"
 
-# No API keys needed — Workers AI uses your Cloudflare account
-# Optional: set a security token to restrict access to your sheet only
-# npx wrangler secret put TRACKULATE_TOKEN
+# KV namespace for memory + rate limiting
+# Create it first: npx wrangler kv namespace create TRACKULATE_KV
+# Then paste the id from the output below
+[[kv_namespaces]]
+binding = "TRACKULATE_KV"
+id      = "PASTE_YOUR_KV_NAMESPACE_ID_HERE"
+
+# Cron trigger — monthly email on 1st of month at 8am UTC
+[triggers]
+crons = ["0 8 1 * *"]
+
+# Optional secrets (set with: npx wrangler secret put <NAME>)
+# TRACKULATE_TOKEN — restrict Worker access to your sheet only
