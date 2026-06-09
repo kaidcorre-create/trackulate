@@ -55,11 +55,14 @@ export default {
       env, feature, prompt, userId, financialData
     );
 
-    const systemPrompt = buildSystemPrompt(feature);
+    // Use system prompt from Apps Script if provided (for chat feature)
+    // Otherwise build one based on feature type
+    const systemPrompt = body.system || buildSystemPrompt(feature);
+    const history      = body.history || null;
 
     let result;
     try {
-      result = await callWorkersAI(env, systemPrompt, enrichedPrompt);
+      result = await callWorkersAI(env, systemPrompt, enrichedPrompt, history);
     } catch (e) {
       return json({ error: `Workers AI error: ${e.message}` }, 502);
     }
@@ -170,14 +173,27 @@ function buildSystemPrompt(feature) {
 }
 
 // ════════════════════════════════════════════════════════════
-// WORKERS AI CALL
+// WORKERS AI CALL — supports conversation history
 // ════════════════════════════════════════════════════════════
-async function callWorkersAI(env, systemPrompt, userPrompt) {
+async function callWorkersAI(env, systemPrompt, userPrompt, history) {
+  // Build messages array with history
+  const messages = [{ role: "system", content: systemPrompt }];
+
+  // Add conversation history if provided (trim to last 8 exchanges)
+  if (history && history.length) {
+    const trimmed = history.slice(-16); // 8 pairs
+    trimmed.forEach(m => {
+      if (m.role === "user" || m.role === "assistant") {
+        messages.push({ role: m.role, content: String(m.content) });
+      }
+    });
+  } else {
+    // No history — just add the user message
+    messages.push({ role: "user", content: userPrompt });
+  }
+
   const response = await env.AI.run(MODEL, {
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user",   content: userPrompt   },
-    ],
+    messages,
     max_tokens: MAX_TOK,
   });
   return response?.response ?? "No response received.";
