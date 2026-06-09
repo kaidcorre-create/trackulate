@@ -7,7 +7,7 @@ compatibility_flags = ["nodejs_compat"]
 ENVIRONMENT = "production"
 
 # Workers AI binding — gives access to env.AI
-[[ai]]
+[ai]
 binding = "AI"
 
 # No API keys needed — Workers AI uses your Cloudflare account
