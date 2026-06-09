@@ -2,11 +2,14 @@ name = "trackulate-ai-worker"
 main = "index.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
- 
+
 [vars]
 ENVIRONMENT = "production"
- 
-# Set your Anthropic API key as a secret (never commit it):
-# Run: npx wrangler secret put ANTHROPIC_KEY
-# Then paste your key from console.anthropic.com
- 
+
+# Workers AI binding — gives access to env.AI
+[[ai]]
+binding = "AI"
+
+# No API keys needed — Workers AI uses your Cloudflare account
+# Optional: set a security token to restrict access to your sheet only
+# npx wrangler secret put TRACKULATE_TOKEN
