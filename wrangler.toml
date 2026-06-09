@@ -1,4 +1,4 @@
-name = "trackulate-ai-worker"
+name = "trackulate"
 main = "index.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
@@ -15,7 +15,7 @@ binding = "AI"
 # Then paste the id from the output below
 [[kv_namespaces]]
 binding = "TRACKULATE_KV"
-id      = "PASTE_YOUR_KV_NAMESPACE_ID_HERE"
+id      = "937593573fd046e09e64e5eb99b0506b"
 
 # Cron trigger — monthly email on 1st of month at 8am UTC
 [triggers]
