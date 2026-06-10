@@ -11,7 +11,7 @@ const CORS = {
 };
 
 const MODEL     = "@cf/meta/llama-3.1-8b-instruct";
-const MAX_TOK   = 1024;
+const MAX_TOK   = 4096;
 const RATE_MAX  = 50;   // max AI calls per user per day
 const RATE_WIN  = 86400; // 24 hours in seconds
 
