@@ -20,7 +20,7 @@ id      = "937593573fd046e09e64e5eb99b0506b"
 # Create: npx wrangler kv namespace create TRACKULATE_LICENCES
 [[kv_namespaces]]
 binding = "TRACKULATE_LICENCES"
-id      = "PASTE_TRACKULATE_LICENCES_KV_ID_HERE"
+id      = "8c8eaa9ab5a14579b070587a6cd45d82"
 
 # D1 — usage + fulfilment log
 # Create: npx wrangler d1 create trackulate_db
