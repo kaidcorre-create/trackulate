@@ -1,0 +1,43 @@
+name = "trackulate"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "production"
+
+# Workers AI
+[ai]
+binding = "AI"
+
+# KV — rate limiting + AI memory
+# Create: npx wrangler kv namespace create TRACKULATE_KV
+[[kv_namespaces]]
+binding = "TRACKULATE_KV"
+id      = "937593573fd046e09e64e5eb99b0506b"
+
+# KV — licence store
+# Create: npx wrangler kv namespace create TRACKULATE_LICENCES
+[[kv_namespaces]]
+binding = "TRACKULATE_LICENCES"
+id      = "8c8eaa9ab5a14579b070587a6cd45d82"
+
+# D1 — usage + fulfilment log
+# Create: npx wrangler d1 create trackulate_db
+[[d1_databases]]
+binding       = "DB"
+database_name = "trackulate_db"
+database_id   = "PASTE_D1_DATABASE_ID_HERE"
+
+# Cron — monthly email trigger (8am on 1st of month UTC)
+[triggers]
+crons = ["0 8 1 * *"]
+
+# Secrets — set with: npx wrangler secret put <NAME>
+# ADMIN_SECRET            — protects /admin/* endpoints
+# STRIPE_WEBHOOK_SECRET   — Stripe webhook signature
+# STRIPE_PRO_PRODUCT_ID   — Stripe Pro product ID
+# RESEND_API_KEY          — Resend transactional email
+# ETSY_API_KEY            — Etsy Open API key
+# ETSY_SHOP_ID            — Etsy shop ID
+# ETSY_PRO_LISTING_ID     — Listing ID for Pro upgrade product

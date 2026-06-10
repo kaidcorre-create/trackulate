@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:    #F8F5FA;
+    --lilac:    #D9B8F0;
+    --amethyst: #B892D4;
+    --blush:    #E8D4F8;
+    --violet:   #2E1540;
+    --violet2:  #3F2552;
+    --border:   #EDE5F8;
+    --ff-d: 'Space Grotesk', sans-serif;
+    --ff-b: 'Figtree', sans-serif;
+    --ff-m: 'JetBrains Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--ff-b); background: var(--cream); color: var(--violet); font-size: 13px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+  .hdr { background: var(--violet); padding: 14px 18px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .hdr-kicker { font-family: var(--ff-m); font-size: 7px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--amethyst); margin-bottom: 2px; opacity: 0.85; }
+  .hdr-title  { font-family: var(--ff-d); font-size: 13px; font-weight: 700; color: var(--cream); letter-spacing: -0.2px; }
+
+  .body { flex: 1; padding: 18px; }
+
+  .detail-list { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(46,21,64,0.07), 0 0 0 1px rgba(46,21,64,0.04); }
+  .detail-row  { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--blush); }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-label { font-family: var(--ff-m); font-size: 8.5px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--amethyst); opacity: 0.8; }
+  .detail-value { font-family: var(--ff-b); font-size: 11.5px; font-weight: 600; color: var(--violet); text-align: right; }
+
+  .tier-badge { display: inline-block; font-family: var(--ff-m); font-size: 9px; letter-spacing: 0.5px; background: var(--amethyst); color: white; padding: 3px 9px; border-radius: 4px; }
+
+  .close-btn { width: 100%; margin-top: 16px; padding: 11px; background: var(--violet); color: var(--cream); border: none; border-radius: 8px; font-family: var(--ff-d); font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.15s; }
+  .close-btn:hover { background: var(--violet2); }
+
+  .loading { text-align: center; padding: 20px; font-family: var(--ff-m); font-size: 9px; color: var(--amethyst); opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="24" height="24" style="flex-shrink:0;">
+    <rect width="500" height="500" rx="80" fill="#F8F5FA"/>
+    <rect x="78" y="108" width="344" height="72" rx="5" fill="#D9B8F0"/>
+    <rect x="212" y="180" width="76" height="222" rx="4" fill="#2E1540"/>
+  </svg>
+  <div>
+    <div class="hdr-kicker">Trackulate</div>
+    <div class="hdr-title">Licence Details</div>
+  </div>
+</div>
+
+<div class="body">
+  <div id="loading" class="loading">Loading…</div>
+  <div id="content" style="display:none;">
+    <div class="detail-list">
+      <div class="detail-row">
+        <div class="detail-label">Tier</div>
+        <div class="detail-value" id="d-tier">—</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Status</div>
+        <div class="detail-value" id="d-status">—</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">Registered email</div>
+        <div class="detail-value" id="d-email" style="font-size:10px;">—</div>
+      </div>
+    </div>
+    <button class="close-btn" onclick="google.script.host.close()">Close</button>
+  </div>
+</div>
+
+<script>
+if (typeof google === "undefined") {
+  window.google = {
+    script: {
+      host: { close: function() { alert("Closing"); } },
+      run: new Proxy({}, {
+        get: function(t, fn) {
+          return {
+            withSuccessHandler: function(cb) {
+              return {
+                withFailureHandler: function() {
+                  return {
+                    getLicenceStatus: function() {
+                      setTimeout(function() {
+                        cb({ tier: "pro", status: "active", isPro: true, email: "user@example.com" });
+                      }, 400);
+                    }
+                  };
+                }
+              };
+            }
+          };
+        }
+      })
+    }
+  };
+}
+
+window.onload = function() {
+  google.script.run
+    .withSuccessHandler(function(data) {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("content").style.display = "block";
+      var tier   = data.tier   || "standard";
+      var status = data.status || "—";
+      var email  = data.email  || "—";
+      var tierEl = document.getElementById("d-tier");
+      if (tier === "pro") {
+        tierEl.innerHTML = "<span class='tier-badge'>PRO</span>";
+      } else {
+        tierEl.textContent = "Standard";
+      }
+      document.getElementById("d-status").textContent = status.charAt(0).toUpperCase() + status.slice(1);
+      document.getElementById("d-email").textContent  = email;
+    })
+    .withFailureHandler(function() {
+      document.getElementById("loading").textContent = "Could not load licence info.";
+    })
+    .getLicenceStatus();
+};
+</script>
+</body>
+</html>
