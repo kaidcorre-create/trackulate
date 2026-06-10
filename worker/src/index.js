@@ -16,7 +16,7 @@ const CORS = {
 };
 
 // Cloudflare Pages URL — sidebar HTML is served from here
-const PAGES_URL = "https://trackulate-sidebar.kai-d-corre-ea2.workers.dev";
+const PAGES_URL = "https://trackulate.pages.dev";
 
 export default {
   async fetch(request, env) {
