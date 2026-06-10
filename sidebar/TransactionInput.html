@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction Input</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Figtree', 'Segoe UI', sans-serif;
+      background: #F8F5FA;
+      color: #2E1540;
+      padding: 20px;
+    }
+    h2 { color: #2E1540; font-size: 18px; margin-bottom: 12px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #5a4070; margin-bottom: 4px; margin-top: 12px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1.5px solid #D9B8F0;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #2E1540;
+      background: #fff;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #B892D4; }
+    textarea { resize: vertical; min-height: 60px; }
+    .btn {
+      display: block;
+      width: 100%;
+      background: #2E1540;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 11px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .btn:hover { background: #B892D4; }
+    .msg { font-size: 12px; color: #B892D4; margin-top: 10px; text-align: center; }
+  </style>
+</head>
+<body>
+  <h2>Add Transaction</h2>
+
+  <label>Date</label>
+  <input type="date" id="txDate">
+
+  <label>Description</label>
+  <input type="text" id="txDesc" placeholder="e.g. Tesco Extra">
+
+  <label>Amount (£)</label>
+  <input type="number" id="txAmount" placeholder="0.00" step="0.01">
+
+  <label>Type</label>
+  <select id="txType">
+    <option value="expense">Expense</option>
+    <option value="income">Income</option>
+  </select>
+
+  <label>Category</label>
+  <input type="text" id="txCategory" placeholder="e.g. Groceries">
+
+  <label>Notes</label>
+  <textarea id="txNotes" placeholder="Optional"></textarea>
+
+  <button class="btn" onclick="addTransaction()">Add Transaction</button>
+  <div class="msg" id="msg"></div>
+
+  <script>
+    function addTransaction() {
+      var date     = document.getElementById("txDate").value;
+      var desc     = document.getElementById("txDesc").value;
+      var amount   = parseFloat(document.getElementById("txAmount").value);
+      var type     = document.getElementById("txType").value;
+      var category = document.getElementById("txCategory").value;
+      var notes    = document.getElementById("txNotes").value;
+
+      if (!date || !desc || isNaN(amount)) {
+        document.getElementById("msg").textContent = "Date, description and amount are required.";
+        return;
+      }
+
+      document.getElementById("msg").textContent = "Adding...";
+
+      google.script.run
+        .withSuccessHandler(function() {
+          document.getElementById("msg").textContent = "Transaction added!";
+          setTimeout(function() { document.getElementById("msg").textContent = ""; }, 2000);
+        })
+        .withFailureHandler(function(e) {
+          document.getElementById("msg").textContent = "Error: " + e.message;
+        })
+        .addTransactionFromSidebar(date, desc, amount, type, category, notes);
+    }
+
+    // Set today as default date
+    var today = new Date();
+    var yyyy  = today.getFullYear();
+    var mm    = String(today.getMonth() + 1).padStart(2, "0");
+    var dd    = String(today.getDate()).padStart(2, "0");
+    document.getElementById("txDate").value = yyyy + "-" + mm + "-" + dd;
+  </script>
+</body>
+</html>

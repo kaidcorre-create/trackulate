@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:    #F8F5FA;
+    --lilac:    #D9B8F0;
+    --amethyst: #B892D4;
+    --blush:    #E8D4F8;
+    --violet:   #2E1540;
+    --violet2:  #3F2552;
+    --border:   #EDE5F8;
+    --green:    #2E7D5A;
+    --red:      #B84040;
+    --shadow:   0 1px 4px rgba(46,21,64,0.08), 0 0 0 1px rgba(46,21,64,0.04);
+    --ff-d: 'Space Grotesk', sans-serif;
+    --ff-b: 'Figtree', sans-serif;
+    --ff-m: 'JetBrains Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--ff-b);
+    background: var(--cream);
+    color: var(--violet);
+    font-size: 13px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .hdr {
+    background: var(--violet);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .hdr-kicker { font-family: var(--ff-m); font-size: 7px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--amethyst); margin-bottom: 2px; opacity: 0.85; }
+  .hdr-title  { font-family: var(--ff-d); font-size: 14px; font-weight: 700; color: var(--cream); letter-spacing: -0.2px; }
+
+  /* ── BODY ── */
+  .body { flex: 1; overflow-y: auto; padding: 18px; }
+
+  /* ── STATE 1: PITCH ── */
+  .pitch-features { margin: 14px 0; }
+  .feat-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid var(--border);
+  }
+  .feat-row:last-child { border-bottom: none; }
+  .feat-check { flex-shrink: 0; color: var(--amethyst); margin-top: 1px; }
+  .feat-text  { font-family: var(--ff-b); font-size: 11.5px; color: var(--violet); line-height: 1.5; }
+  .feat-text  small { display: block; font-family: var(--ff-m); font-size: 9px; color: var(--amethyst); margin-top: 2px; opacity: 0.8; }
+
+  .price-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--blush); border-radius: 9px; padding: 12px 14px;
+    margin: 14px 0 16px;
+  }
+  .price-label { font-family: var(--ff-m); font-size: 9px; letter-spacing: 1px; color: var(--amethyst); text-transform: uppercase; opacity: 0.85; }
+  .price-amount { font-family: var(--ff-d); font-size: 22px; font-weight: 700; color: var(--violet); letter-spacing: -0.5px; }
+  .price-note   { font-family: var(--ff-m); font-size: 9px; color: var(--amethyst); opacity: 0.7; }
+
+  .btn-primary { width: 100%; padding: 12px; background: var(--violet); color: var(--cream); border: none; border-radius: 8px; font-family: var(--ff-d); font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.15s; letter-spacing: -0.1px; margin-bottom: 10px; }
+  .btn-primary:hover { background: var(--violet2); }
+
+  .btn-secondary { width: 100%; padding: 10px; background: transparent; color: var(--amethyst); border: 1px solid var(--border); border-radius: 8px; font-family: var(--ff-b); font-size: 12px; font-weight: 500; cursor: pointer; transition: 0.15s; margin-bottom: 10px; }
+  .btn-secondary:hover { background: var(--blush); }
+
+  .not-now { display: block; text-align: center; font-family: var(--ff-m); font-size: 9px; color: var(--amethyst); cursor: pointer; opacity: 0.6; margin-top: 4px; text-decoration: underline; }
+  .not-now:hover { opacity: 1; }
+
+  /* ── STATE 2: KEY ENTRY ── */
+  .back-btn { display: flex; align-items: center; gap: 6px; font-family: var(--ff-b); font-size: 11px; color: var(--amethyst); cursor: pointer; margin-bottom: 16px; opacity: 0.8; background: none; border: none; padding: 0; }
+  .back-btn:hover { opacity: 1; }
+
+  .s2-title { font-family: var(--ff-d); font-size: 17px; font-weight: 700; color: var(--violet); letter-spacing: -0.3px; margin-bottom: 6px; }
+  .s2-sub   { font-family: var(--ff-b); font-size: 11px; color: var(--amethyst); line-height: 1.65; margin-bottom: 16px; }
+
+  .key-input {
+    width: 100%; padding: 11px 12px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: var(--ff-m); font-size: 12px; color: var(--violet);
+    background: white; outline: none; transition: border-color 0.15s;
+    box-shadow: var(--shadow); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .key-input:focus { border-color: var(--amethyst); }
+  .key-input::placeholder { color: var(--amethyst); opacity: 0.45; text-transform: none; letter-spacing: 0; }
+
+  .activate-btn { width: 100%; padding: 12px; background: var(--violet); color: var(--cream); border: none; border-radius: 8px; font-family: var(--ff-d); font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.15s; letter-spacing: -0.1px; }
+  .activate-btn:hover { background: var(--violet2); }
+  .activate-btn:disabled { background: var(--amethyst); cursor: not-allowed; }
+
+  .status { display: none; padding: 10px 12px; border-radius: 8px; font-family: var(--ff-b); font-size: 11px; margin-top: 10px; line-height: 1.5; }
+  .status.loading { background: var(--blush);   color: var(--violet); border: 1px solid var(--border); display: block; }
+  .status.ok      { background: #E8F8F0; color: var(--green); border: 1px solid #C0E8D0; display: block; }
+  .status.err     { background: #FDECEA; color: var(--red);   border: 1px solid #F5C0C0; display: block; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="26" height="26" style="flex-shrink:0;">
+    <rect width="500" height="500" rx="80" fill="#F8F5FA"/>
+    <rect x="78" y="108" width="344" height="72" rx="5" fill="#D9B8F0"/>
+    <rect x="212" y="180" width="76" height="222" rx="4" fill="#2E1540"/>
+  </svg>
+  <div>
+    <div class="hdr-kicker">Trackulate</div>
+    <div class="hdr-title" id="hdr-title">Unlock Pro Features</div>
+  </div>
+</div>
+
+<div class="body">
+
+  <!-- STATE 1: PITCH -->
+  <div id="state-pitch">
+    <div class="pitch-features">
+      <div class="feat-row">
+        <div class="feat-check"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,12 14,4"/></svg></div>
+        <div class="feat-text">Trackulate AI chat
+          <small>Ask questions about your live figures — debts, budgets, subscriptions</small>
+        </div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-check"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,12 14,4"/></svg></div>
+        <div class="feat-text">PDF bank statement import
+          <small>Drag in your statement — AI reads and categorises every transaction</small>
+        </div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-check"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,12 14,4"/></svg></div>
+        <div class="feat-text">Email automations
+          <small>Weekly budget alerts, monthly summary, subscription &amp; debt reminders</small>
+        </div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-check"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,12 14,4"/></svg></div>
+        <div class="feat-text">Plain English transaction entry
+          <small>Type "spent £45 at Tesco yesterday" — AI parses and logs it instantly</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="price-row">
+      <div>
+        <div class="price-label">One-off upgrade</div>
+        <div class="price-note">No subscription · yours forever</div>
+      </div>
+      <div class="price-amount">£15</div>
+    </div>
+
+    <button class="btn-primary" onclick="buyPro()">Buy Pro Upgrade — £15</button>
+    <button class="btn-secondary" onclick="showKeyEntry()">I already have a key &rarr;</button>
+    <span class="not-now" onclick="notNow()">Not now</span>
+  </div>
+
+  <!-- STATE 2: KEY ENTRY -->
+  <div id="state-key" style="display:none;">
+    <button class="back-btn" onclick="showPitch()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="10,3 4,8 10,13"/></svg>
+      Back
+    </button>
+    <div class="s2-title">Enter your licence key</div>
+    <div class="s2-sub">You should have received your key by email after purchase. It looks like <strong>TRACK-XXXX-XXXX-XXXX</strong>.</div>
+    <input type="text" class="key-input" id="key-input" placeholder="TRACK-XXXX-XXXX-XXXX" maxlength="19"
+      oninput="formatKey(this)"
+      onkeydown="if(event.key==='Enter'){activate();}">
+    <button class="activate-btn" id="act-btn" onclick="activate()">Activate</button>
+    <div class="status" id="status"></div>
+  </div>
+
+</div>
+
+<script>
+if (typeof google === "undefined") {
+  window.google = {
+    script: {
+      host: { close: function() { alert("Closing"); } },
+      run: new Proxy({}, {
+        get: function(t, fn) {
+          return {
+            withSuccessHandler: function(cb) {
+              return {
+                withFailureHandler: function() {
+                  return {
+                    activateLicence: function() {
+                      setTimeout(function() { cb({ success: true, tier: "pro", message: "Licence activated! Pro features are now unlocked." }); }, 1000);
+                    }
+                  };
+                }
+              };
+            }
+          };
+        }
+      })
+    }
+  };
+}
+
+function showPitch() {
+  document.getElementById("state-pitch").style.display = "block";
+  document.getElementById("state-key").style.display   = "none";
+  document.getElementById("hdr-title").textContent     = "Unlock Pro Features";
+}
+
+function showKeyEntry() {
+  document.getElementById("state-pitch").style.display = "none";
+  document.getElementById("state-key").style.display   = "block";
+  document.getElementById("hdr-title").textContent     = "Enter Licence Key";
+  setTimeout(function() { document.getElementById("key-input").focus(); }, 100);
+}
+
+function buyPro() {
+  // Open purchase page — uses window.open which is allowed in GAS modals
+  window.open("https://trackulate.co.uk/pro", "_blank");
+}
+
+function notNow() {
+  google.script.host.close();
+}
+
+function formatKey(input) {
+  // Auto-format as TRACK-XXXX-XXXX-XXXX
+  var val = input.value.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+  // The prefix TRACK is 5 chars, then three 4-char groups
+  var parts = [];
+  if (val.length > 0)  parts.push(val.substring(0, Math.min(5, val.length)));
+  if (val.length > 5)  parts.push(val.substring(5, Math.min(9, val.length)));
+  if (val.length > 9)  parts.push(val.substring(9, Math.min(13, val.length)));
+  if (val.length > 13) parts.push(val.substring(13, Math.min(17, val.length)));
+  input.value = parts.join("-");
+}
+
+function activate() {
+  var key = document.getElementById("key-input").value.trim();
+  if (!key) { showStatus("Please enter your licence key.", "err"); return; }
+
+  var btn = document.getElementById("act-btn");
+  btn.disabled = true;
+  showStatus("Activating…", "loading");
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      btn.disabled = false;
+      if (res.success) {
+        showStatus(res.message || "Licence activated! Pro features are now unlocked.", "ok");
+        setTimeout(function() { google.script.host.close(); }, 2200);
+      } else {
+        showStatus(res.message || "Activation failed. Check your key and try again.", "err");
+      }
+    })
+    .withFailureHandler(function(e) {
+      btn.disabled = false;
+      showStatus("Error: " + e.message, "err");
+    })
+    .activateLicence(key);
+}
+
+function showStatus(msg, type) {
+  var el = document.getElementById("status");
+  el.textContent = msg;
+  el.className   = "status " + type;
+}
+</script>
+</body>
+</html>
