@@ -27,7 +27,7 @@ id      = "8c8eaa9ab5a14579b070587a6cd45d82"
 [[d1_databases]]
 binding       = "DB"
 database_name = "trackulate_db"
-database_id   = "PASTE_D1_DATABASE_ID_HERE"
+database_id   = "48ba7e70-6650-4170-bd79-d49c802e4ce2"
 
 # Cron — monthly email trigger (8am on 1st of month UTC)
 [triggers]
